@@ -10,4 +10,4 @@ RUN pip install pandas
 
 RUN pip install -r requirements.txt
 
-COPY sql.py /app/gcs.py
+COPY gcs.py /app/gcs.py
