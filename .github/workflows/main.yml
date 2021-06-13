@@ -23,7 +23,7 @@ jobs:
 
     - name: Build and push
       run: |-
-        cd pipeline1 && docker build -t nminocha/pipeline-1:${{  github.sha }} .
+        cd Pipeline1 && docker build -t nminocha/pipeline-1:${{  github.sha }} .
         docker push nminocha/pipeline-1:${{  github.sha }} && cd ../
-        cd pipeline2 && docker build -t nminocha/pipeline-2:${{  github.sha }} .
+        cd Pipeline2 && docker build -t nminocha/pipeline-2:${{  github.sha }} .
         docker push nminocha/pipeline-2:${{  github.sha }}
