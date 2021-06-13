@@ -1,0 +1,63 @@
+{
+  "pipeline": {
+    "name": "push-answers"
+  },
+  "description": "A pipeline that pushes answers to the database",
+  "transform": {
+    "cmd": [ "/bin/bash" ],
+    "stdin": [
+      "echo $PG_SSLCERT > /app/rawcreds1.txt",
+      "base64 --decode /app/rawcreds1.txt > /app/creds1.json",
+      "export PG_SSLCERT=/app/creds1.json",
+      
+      "echo $PG_SSLKEY > /app/rawcreds2.txt",
+      "base64 --decode /app/rawcreds2.txt > /app/creds2.json",
+      "export PG_SSLKEY=/app/creds2.json",
+
+      "echo $PG_SSLROOTCERT > /app/rawcreds3.txt",
+      "base64 --decode /app/rawcreds3.txt > /app/creds3.json",
+      "export PG_SSLROOTCERT=/app/creds3.json",
+
+      "chmod 0600 /app/creds1.json",
+      "chmod 0600 /app/creds2.json",
+      "chmod 0600 /app/creds3.json",
+
+      "python /app/sql.py"
+    ],
+    "image": "harshalkhona/pipeline-2",
+    "secrets": [ 
+      {
+        "name": "dbaccess",
+        "env_var": "PG_HOST",
+        "key": "host"
+      },
+      {
+        "name": "dbaccess",
+	"env_var": "PG_PASSWORD",
+	"key": "password"
+      },
+      {
+        "name": "dbaccess",
+	"env_var": "PG_SSLCERT",
+	"key": "sslcert"
+      },
+      {
+	"name": "dbaccess",
+	"env_var": "PG_SSLKEY",
+	"key": "sslkey"
+      },
+      {
+	"name": "dbaccess",
+	"env_var": "PG_SSLROOTCERT",
+	"key": "sslrootcert"
+      }
+
+    ]
+  },
+  "input": {
+    "pfs": {
+      "repo": "getfiles",
+      "glob": "/"
+    }
+  }
+}
